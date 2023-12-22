@@ -3,48 +3,65 @@ import React, { Component } from 'react';
 class RaceTrack extends Component {
   constructor(props) {
     super(props);
+    console.log("hey me",props)
 
-    // Initialize state with default values
     this.state = {
-      participants: this.props.participants,
-      elapsedTime: 0,
+      position: 0,
+      color:this.getRandomColor()
     };
 
-    // Set up a timer to update elapsed time every second
-    this.timerInterval = setInterval(() => {
-      this.setState((prevState) => ({ elapsedTime: prevState.elapsedTime + 1 }));
-    }, 1000);
+    this.startPosition = 0;
+    this.endPosition = 400; // Adjust as needed
+    this.speed = parseInt(props.track.text2); // Adjust as needed
+    this.interval = 100; // Interval for updating position (in milliseconds)
+  }
+
+  componentDidMount() {
+    this.intervalId = setInterval(this.updatePosition, this.interval);
   }
 
   componentWillUnmount() {
-    // Clear the timer interval when the component is unmounted
-    clearInterval(this.timerInterval);
+    clearInterval(this.intervalId);
   }
 
+  getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  updatePosition = () => {
+    const { position } = this.state;
+    const newPosition = position + (this.speed * this.interval) / 1000;
+
+    if (newPosition >= this.endPosition) {
+      clearInterval(this.intervalId);
+      this.props.sendThedata()
+    } else {
+      this.setState({ position: newPosition });
+    }
+  };
+
   render() {
-    const { participants, elapsedTime } = this.state;
+    const { position,color } = this.state;
 
     return (
-      <div>
-        <h1>Race Track</h1>
-        <div>
-          <h2>Elapsed Time: {elapsedTime} seconds</h2>
-        </div>
-        <div>
-          {participants.map((participant, index) => (
-            <div key={index}>
-              <h3>{participant.name}</h3>
-              <div
-                style={{
-                  width: `${participant.speed * elapsedTime}px`, // Adjust the style based on speed and time
-                  height: '20px',
-                  backgroundColor: 'blue',
-                  margin: '5px 0',
-                }}
-              ></div>
-            </div>
-          ))}
-        </div>
+      <div style={{ position: 'relative', height: '50px', width: '400px', borderBottom: '1px solid black',borderRight:"10px solid green" }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: `${position}px`,
+            transform: 'translate(-50%, -50%)',
+            height: '28px',
+            width: '28px',
+            borderRadius: '50%',
+            background: color,
+          }}
+        ></div>
       </div>
     );
   }

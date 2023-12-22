@@ -1,3 +1,11 @@
+.raceDisplay{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background-color: rgb(135, 118, 118);
+    height: 100vh;
+}
 .main-container{
     height: 100vh;
     display: flex;
@@ -11,6 +19,16 @@
     align-items: flex-end;
     
 }
+.scoreDisplay{
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    flex-direction:row;
+    justify-content: center;
+    /* width: 500px;
+    height:300px;
+    border: solid 1px blue; */
+}
 hr{
     width:100%;
 }
@@ -20,6 +38,7 @@ hr{
     width:100px;
     padding: 10px;
     border-width: 0px;
+    margin:10px;
 }
 .runner-details-container{
     width:30%;
